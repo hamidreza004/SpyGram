@@ -4,7 +4,7 @@ from pytg import Telegram
 import time
 import json
 
-tg = Telegram(telegram="../tg/bin/telegram-cli",pubkey_file="../tg/tg-server.pub")
+tg = Telegram(telegram="tg/bin/telegram-cli",pubkey_file="tg/tg-server.pub")
 receiver = tg.receiver
 sender = tg.sender
 sender.dialog_list()
