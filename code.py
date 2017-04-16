@@ -3,12 +3,13 @@ import datetime
 from pytg import Telegram
 import time
 import json
+import sys
 
 tg = Telegram(telegram="tg/bin/telegram-cli",pubkey_file="tg/tg-server.pub")
 receiver = tg.receiver
 sender = tg.sender
-#sender.dialog_list()
-#sender.contacts_list()
+sender.dialog_list()
+sender.contacts_list()
 
 MAX = 3
 js = {}
@@ -17,16 +18,22 @@ def save_js():
 	F = open("out_data.txt" , 'w')
 	F.write(json.dumps(js))
 def getlist ():
-	arr = []
+	arr = set([])
 	F = open("names.txt",'r')
 	data = F.readlines()
 	for x in data :
 		x = x.replace("\n","")
 		print x
 		if x[0] == '@':
-			arr.append(sender.contacts_search(unicode(x[1:]))['print_name'])
+			arr.add(sender.contacts_search(unicode(x[1:]))['print_name'])
 		else :
-			arr.append(x)
+			arr.add(x)
+	for x in sender.dialog_list():	
+		if x[u'peer_type']==u'user':
+			arr.add(x[u'print_name'])
+	for x in sender.contacts_list():	
+		if x[u'peer_type']==u'user':
+			arr.add(x[u'print_name'])
 	return arr
 def make_js(lst):
 	print "start.."
@@ -55,11 +62,3 @@ def make_js(lst):
 make_js(getlist())
 
 print json.dumps(js)
-
-#print sender.contacts_search(u'Yousef1561')
-
-#print sender.user_info(sender.contacts_search(u'Yousef1561')['print_name'])
-
-
-#print(sender.user_info(u'Hamidreza'))
-#sender.send_msg(u'Sadegh_Mahdavi', u'Hello World!')
