@@ -20,6 +20,5 @@ sender = tg.sender
 sender.dialog_list()
 sender.contacts_list()
 
-for i in range(1000):
-	sender.send_msg(u'Ali_Ahmadi',u'ine pesar')
+
 sender.send_msg(u'Hamidreza_Hedayati',u'fuck yourself')

@@ -16,21 +16,26 @@ js = {}
 def save_js():
 	F = open("out_data.txt" , 'w')
 	F.write(json.dumps(js))
-
 def getlist ():
 	arr = []
 	F = open("names.txt",'r')
 	data = F.readlines()
 	for x in data :
+		x = x.replace("\n","")
+		print x
 		if x[0] == '@':
-			arr.append(sender.contacts_search(unicode(x[1:(len(x)-1)]))['print_name'])
+			arr.append(sender.contacts_search(unicode(x[1:]))['print_name'])
 		else :
-			arr.append(x[0:(len(x)-1)])
+			arr.append(x)
 	return arr
 def make_js(lst):
+	print "start.."
+	cnt = 0
 	while True:
 		now = datetime.datetime.now()
-		if now.second % 10 == 0:
+		if now.second % 5 == 0 :
+			cnt+=1
+			print "start for ",cnt," time"
 			js[str(now)[0:19]] = {}
 			for x in lst :
 				user = sender.user_info(unicode(x))
@@ -41,15 +46,15 @@ def make_js(lst):
 					else :
 						js[str(now)[0:19]][x] = "offline"
 				except :
-					js[str(now)[0:19]][x] = "offline"
+					js[str(now)[0:19]][x] = "recently"
 			if now.minute % 1 == 0:
+				print "save"
 				save_js()
-
+			time.sleep(1)
 
 make_js(getlist())
+
 print json.dumps(js)
-
-
 
 #print sender.contacts_search(u'Yousef1561')
 
