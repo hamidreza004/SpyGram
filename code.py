@@ -23,42 +23,37 @@ def getlist ():
 	data = F.readlines()
 	for x in data :
 		x = x.replace("\n","")
+		x = x.replace(" ","")
 		print x
 		if x[0] == '@':
 			arr.add(sender.contacts_search(unicode(x[1:]))['print_name'])
 		else :
 			arr.add(x)
-	for x in sender.dialog_list():	
-		if x[u'peer_type']==u'user':
-			arr.add(x[u'print_name'])
-	for x in sender.contacts_list():	
-		if x[u'peer_type']==u'user':
-			arr.add(x[u'print_name'])
+	print "users"
+	for x in arr :
+		print "     ",x
 	return arr
 def make_js(lst):
 	print "start.."
 	cnt = 0
 	while True:
 		now = datetime.datetime.now()
-		if now.second % 5 == 0 :
+		if now.second == 0 :
 			cnt+=1
 			print "start for ",cnt," time"
 			js[str(now)[0:19]] = {}
 			for x in lst :
-				user = sender.user_info(unicode(x))
+				user = sender.user_info(unicode(x))																													
 				try:
 					when = user[u'when'][0:19]
 					if(str(when) > str(now)):
-						js[str(now)[0:19]][x] = "online"
-					else :
-						js[str(now)[0:19]][x] = "offline"
+						js[str(now)[0:19]][x] = ""
 				except :
-					js[str(now)[0:19]][x] = "recently"
+					pass
+				time.sleep(1.5)
 			if now.minute % 1 == 0:
 				print "save"
 				save_js()
-			time.sleep(1)
-
 make_js(getlist())
 
 print json.dumps(js)
